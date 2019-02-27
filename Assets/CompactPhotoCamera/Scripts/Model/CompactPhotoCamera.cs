@@ -116,7 +116,7 @@ namespace CompactPhotoCamera_Unity.Model.Device
                 Plan = new ShootingPlan
                 {
                     CameraResolution = cameraResolution,
-                    CameraPosition = Camera.current.transform.position,
+                    CameraPosition = Camera.main.transform.position,
                     ImageBuffer = imageBufferListRaw.ToArray(),
                     CameraToWorldMatrix = cameraToWorldMatrix,
                     PixelToCameraMatrix = pixelToCameraMatrix,
