@@ -18,7 +18,10 @@ namespace CompactPhotoCamera_Unity.Model.Device
         {
             public Resolution CameraResolution { get; set; }
             public Vector3 CameraPosition { get; set; }
+            public Vector3 CameraForward { get; set; }
             public Matrix4x4 CameraToWorldMatrix { get; set; }
+            public Matrix4x4 WorldToCameraMatrix { get; set; }
+            public Matrix4x4 ProjectionMatrix { get; set; }
             public Matrix4x4 PixelToCameraMatrix { get; set; }
             public byte[] ImageBuffer { get; set; }
         }
@@ -108,6 +111,7 @@ namespace CompactPhotoCamera_Unity.Model.Device
                 // カメラの向きをワールド座標に変換するためのパラメータ保持
                 var cameraToWorldMatrix = new Matrix4x4();
                 photoCaptureFrame.TryGetCameraToWorldMatrix(out cameraToWorldMatrix);
+                var worldToCameraMatrix = cameraToWorldMatrix.inverse;
 
                 Matrix4x4 projectionMatrix;
                 photoCaptureFrame.TryGetProjectionMatrix(Camera.main.nearClipPlane, Camera.main.farClipPlane, out projectionMatrix);
@@ -117,9 +121,12 @@ namespace CompactPhotoCamera_Unity.Model.Device
                 {
                     CameraResolution = cameraResolution,
                     CameraPosition = Camera.main.transform.position,
-                    ImageBuffer = imageBufferListRaw.ToArray(),
+                    CameraForward = Camera.main.transform.forward,
                     CameraToWorldMatrix = cameraToWorldMatrix,
+                    WorldToCameraMatrix = worldToCameraMatrix,
+                    ProjectionMatrix = projectionMatrix,
                     PixelToCameraMatrix = pixelToCameraMatrix,
+                    ImageBuffer = imageBufferList.ToArray(),
                 };
 
                 Debug.Log("Done...");
